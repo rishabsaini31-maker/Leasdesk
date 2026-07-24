@@ -5,15 +5,28 @@ export interface AuthRequest extends Request {
   admin?: { adminId: string; email: string }
 }
 
-export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
+function getToken(req: Request): string | undefined {
   const authHeader = req.headers.authorization
-  if (!authHeader) {
-    return res.status(401).json({ error: 'Missing authorization header' })
+  if (authHeader?.startsWith('Bearer ')) {
+    return authHeader.slice(7)
   }
 
-  const [scheme, token] = authHeader.split(' ')
-  if (scheme !== 'Bearer' || !token) {
-    return res.status(401).json({ error: 'Invalid authorization format. Use Bearer <token>' })
+  const cookieHeader = req.headers.cookie
+  if (cookieHeader) {
+    const cookies = cookieHeader.split(';').map((c) => c.trim().split('='))
+    const authCookie = cookies.find(([name]) => name === 'auth_token')
+    if (authCookie?.[1]) {
+      return authCookie[1]
+    }
+  }
+
+  return undefined
+}
+
+export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
+  const token = getToken(req)
+  if (!token) {
+    return res.status(401).json({ error: 'Missing authorization token' })
   }
 
   const payload = verifyToken(token)

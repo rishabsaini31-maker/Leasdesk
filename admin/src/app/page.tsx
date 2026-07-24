@@ -25,7 +25,10 @@ export default function Home() {
     async function checkAuth() {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-        const res = await fetch(`${apiUrl}/api/auth/me`);
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+        const res = await fetch(`${apiUrl}/api/auth/me`, {
+          credentials: 'include',
+        });
         if (res.ok) {
           const data = await res.json();
           setAuth({ id: data.admin.id, email: data.admin.email });
