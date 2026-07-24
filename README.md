@@ -1,4 +1,4 @@
-# LeadDesk Mini — Separated Architecture
+<!-- Build: 2026-07-24T18:30+05:30 -->
 
 This repo now contains **three completely independent projects** under root-level directories:
 
