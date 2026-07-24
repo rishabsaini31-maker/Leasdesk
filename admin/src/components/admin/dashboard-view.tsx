@@ -78,7 +78,8 @@ export function DashboardView() {
       setLoading(true);
       setError('');
       const params = debouncedSearch ? `?search=${encodeURIComponent(debouncedSearch)}` : '';
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/leads${params}`);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const res = await fetch(`${apiUrl}/api/leads${params}`);
 
       if (res.status === 401) {
         toast.error('Session expired. Please login again.');
@@ -118,7 +119,8 @@ export function DashboardView() {
   const handleStatusChange = async (leadId: string, status: LeadStatus) => {
     try {
       setStatusLoading(leadId);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/leads/${leadId}/status`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const res = await fetch(`${apiUrl}/api/leads/${leadId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
@@ -141,7 +143,7 @@ export function DashboardView() {
 
   const handleLogout = async () => {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, { method: 'POST' });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/auth/logout`, { method: 'POST' });
     } catch {
       // Continue with client-side logout even if API fails
     }
