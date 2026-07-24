@@ -231,8 +231,6 @@ export function DashboardView() {
                 </TooltipTrigger>
                 <TooltipContent>Back to Home</TooltipContent>
               </Tooltip>
-                <TooltipContent>Back to Home</TooltipContent>
-              </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Logout">
