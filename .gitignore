@@ -56,7 +56,7 @@ server.log
 # Skills directory
 /skills/
 
-# Database files (if any local copies)
+# Database files (not used in production, PostgreSQL is primary)
 *.db
 *.sqlite
 *.sqlite3

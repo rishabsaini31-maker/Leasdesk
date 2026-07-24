@@ -20,7 +20,7 @@ cd frontend && npm install && cd ..
 cd admin && npm install && cd ..
 cd backend && npm install && cd ..
 
-# Setup database (SQLite)
+# Setup database (PostgreSQL via Supabase)
 cd backend && npm run db:push && npm run db:seed && cd ..
 
 # Run all 3 in parallel
@@ -39,7 +39,7 @@ cd admin    && npm run dev   # http://localhost:3001
 ```bash
 cd backend
 npm install
-npm run db:push     # Push Prisma schema to SQLite
+npm run db:push     # Push Prisma schema to PostgreSQL
 npm run db:seed     # Create demo admin (admin@leaddesk.com / Admin@123)
 npm run dev         # Express server on :4000
 ```
