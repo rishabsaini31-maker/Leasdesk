@@ -39,7 +39,7 @@ export interface LeadStats {
 export const leadCreateSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters').trim(),
   email: z.string().email('Please enter a valid email address').toLowerCase().trim(),
-  budget: z.enum(BUDGET_VALUES, { errorMap: () => ({ message: 'Please select a valid budget range' }) }),
+  budget: z.enum(BUDGET_VALUES, { message: 'Please select a valid budget range' }),
   message: z.string().min(10, 'Message must be at least 10 characters').max(500, 'Message must be at most 500 characters').trim(),
 })
 
