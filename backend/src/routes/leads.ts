@@ -1,11 +1,12 @@
 import { Router, Response } from 'express'
 import { db } from '../lib/db'
 import { leadCreateSchema, leadStatusSchema } from '../lib/validation'
-import { AuthRequest } from '../middleware/auth'
+import { authMiddleware, AuthRequest } from '../middleware/auth'
+import { publicLeadLimiter } from '../middleware/rateLimit'
 
 export const leadsRouter = Router()
 
-leadsRouter.get('/', async (req: AuthRequest, res: Response) => {
+leadsRouter.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
     const search = (req.query.search as string)?.trim() || ''
 
@@ -30,7 +31,7 @@ leadsRouter.get('/', async (req: AuthRequest, res: Response) => {
   }
 })
 
-leadsRouter.post('/', async (req: AuthRequest, res: Response) => {
+leadsRouter.post('/', publicLeadLimiter, async (req: AuthRequest, res: Response) => {
   try {
     const parsed = leadCreateSchema.safeParse(req.body)
     if (!parsed.success) {
@@ -59,7 +60,7 @@ leadsRouter.post('/', async (req: AuthRequest, res: Response) => {
   }
 })
 
-leadsRouter.patch('/:id/status', async (req: AuthRequest, res: Response) => {
+leadsRouter.patch('/:id/status', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params
     const parsed = leadStatusSchema.safeParse(req.body)

@@ -5,7 +5,6 @@ import { PORT, CORS_ORIGIN } from './lib/config'
 import { authRouter } from './routes/auth'
 import { leadsRouter } from './routes/leads'
 import { authMiddleware } from './middleware/auth'
-import { publicLeadLimiter } from './middleware/rateLimit'
 import { corsMiddleware } from './middleware/cors'
 import { db } from './lib/db'
 
@@ -46,12 +45,8 @@ app.get('/api/auth/me', authMiddleware, async (req: any, res) => {
   }
 })
 
-// Public rate-limited lead creation
-app.post('/api/leads', publicLeadLimiter, leadsRouter)
-
-// Protected leads routes
-app.get('/api/leads', authMiddleware, leadsRouter)
-app.patch('/api/leads/:id/status', authMiddleware, leadsRouter)
+// Leads routes
+app.use('/api/leads', leadsRouter)
 
 app.get('/health', (_req, res) => {
   console.log('[HEALTH] check')
