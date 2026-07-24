@@ -4,6 +4,7 @@
 	}
 
 	handle @admin_path {
+		rewrite * {path*replace_prefix=/admin}
 		reverse_proxy localhost:3001 {
 			header_up Host {host}
 			header_up X-Forwarded-For {remote_host}

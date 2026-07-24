@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Users, UserPlus, PhoneCall, BadgeCheck } from 'lucide-react';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import { TopNavbar } from '@/components/TopNavbar';
 import { DashboardCard } from '@/components/DashboardCard';
 import { SearchBar } from '@/components/SearchBar';
@@ -15,10 +16,13 @@ import { ViewLeadModal } from '@/components/ViewLeadModal';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { Lead, LeadStatus } from '@/types/lead';
+import { useAuthStore } from '@/stores/auth-store';
 
 const ITEMS_PER_PAGE = 10;
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -28,6 +32,12 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/admin/login');
+    }
+  }, [isAuthenticated, router]);
 
   const fetchLeads = useCallback(async () => {
     try {
