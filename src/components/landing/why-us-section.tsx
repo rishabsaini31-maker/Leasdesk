@@ -28,7 +28,7 @@ const reasons = [
 
 export function WhyUsSection() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
+    <section aria-labelledby="why-us-heading" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -37,7 +37,7 @@ export function WhyUsSection() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 id="why-us-heading" className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
             Why Choose LeadDesk Mini?
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -55,7 +55,7 @@ export function WhyUsSection() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-200">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-200" aria-hidden="true">
                 <reason.icon className="w-6 h-6 text-white" />
               </div>
               <div>

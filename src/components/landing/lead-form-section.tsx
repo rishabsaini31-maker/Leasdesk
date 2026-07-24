@@ -21,6 +21,15 @@ import { leadCreateSchema } from '@/lib/validation';
 import { BUDGET_OPTIONS } from '@/types/lead';
 import type { LeadCreateInput } from '@/lib/validation';
 
+const nameId = 'lead-name';
+const emailId = 'lead-email';
+const budgetId = 'lead-budget';
+const messageId = 'lead-message';
+const nameErrId = 'lead-name-err';
+const emailErrId = 'lead-email-err';
+const budgetErrId = 'lead-budget-err';
+const messageErrId = 'lead-message-err';
+
 export function LeadFormSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -53,7 +62,6 @@ export function LeadFormSection() {
 
       if (!res.ok) {
         if (result.details) {
-          // Show first validation error
           const firstError = Object.values(result.details)[0]?.[0];
           toast.error(firstError || 'Validation failed');
         } else {
@@ -62,7 +70,7 @@ export function LeadFormSection() {
         return;
       }
 
-      toast.success('🎉 Lead submitted successfully! We\'ll be in touch soon.');
+      toast.success('Lead submitted successfully! We\'ll be in touch soon.');
       reset();
       setValue('budget', '');
     } catch {
@@ -97,47 +105,56 @@ export function LeadFormSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.1 }}
+          noValidate
+          aria-busy={isSubmitting}
         >
           {/* Name */}
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-medium text-slate-700">
-              Full Name <span className="text-red-500">*</span>
+            <Label htmlFor={nameId} className="text-sm font-medium text-slate-700">
+              Full Name <span className="text-red-500" aria-hidden="true">*</span>
+              <span className="sr-only">(required)</span>
             </Label>
             <Input
-              id="name"
+              id={nameId}
               placeholder="John Doe"
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? nameErrId : undefined}
               {...register('name')}
               className="bg-white border-slate-300 focus:border-emerald-500 focus:ring-emerald-500/20"
             />
             {errors.name && (
-              <p className="text-sm text-red-500">{errors.name.message}</p>
+              <p id={nameErrId} className="text-sm text-red-500" role="alert">{errors.name.message}</p>
             )}
           </div>
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-medium text-slate-700">
-              Email Address <span className="text-red-500">*</span>
+            <Label htmlFor={emailId} className="text-sm font-medium text-slate-700">
+              Email Address <span className="text-red-500" aria-hidden="true">*</span>
+              <span className="sr-only">(required)</span>
             </Label>
             <Input
-              id="email"
+              id={emailId}
               type="email"
               placeholder="john@example.com"
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? emailErrId : undefined}
               {...register('email')}
               className="bg-white border-slate-300 focus:border-emerald-500 focus:ring-emerald-500/20"
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
+              <p id={emailErrId} className="text-sm text-red-500" role="alert">{errors.email.message}</p>
             )}
           </div>
 
           {/* Budget */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium text-slate-700">
-              Budget Range <span className="text-red-500">*</span>
+            <Label htmlFor={budgetId} className="text-sm font-medium text-slate-700">
+              Budget Range <span className="text-red-500" aria-hidden="true">*</span>
+              <span className="sr-only">(required)</span>
             </Label>
             <Select onValueChange={(value) => setValue('budget', value, { shouldValidate: true })}>
-              <SelectTrigger className="bg-white border-slate-300">
+              <SelectTrigger id={budgetId} aria-invalid={!!errors.budget} aria-describedby={errors.budget ? budgetErrId : undefined} className="bg-white border-slate-300">
                 <SelectValue placeholder="Select your budget" />
               </SelectTrigger>
               <SelectContent>
@@ -149,24 +166,27 @@ export function LeadFormSection() {
               </SelectContent>
             </Select>
             {errors.budget && (
-              <p className="text-sm text-red-500">{errors.budget.message}</p>
+              <p id={budgetErrId} className="text-sm text-red-500" role="alert">{errors.budget.message}</p>
             )}
           </div>
 
           {/* Message */}
           <div className="space-y-2">
-            <Label htmlFor="message" className="text-sm font-medium text-slate-700">
-              Message <span className="text-red-500">*</span>
+            <Label htmlFor={messageId} className="text-sm font-medium text-slate-700">
+              Message <span className="text-red-500" aria-hidden="true">*</span>
+              <span className="sr-only">(required)</span>
             </Label>
             <Textarea
-              id="message"
+              id={messageId}
               placeholder="Tell us about your project..."
               rows={4}
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? messageErrId : undefined}
               {...register('message')}
               className="bg-white border-slate-300 focus:border-emerald-500 focus:ring-emerald-500/20 resize-none"
             />
             {errors.message && (
-              <p className="text-sm text-red-500">{errors.message.message}</p>
+              <p id={messageErrId} className="text-sm text-red-500" role="alert">{errors.message.message}</p>
             )}
           </div>
 
@@ -178,13 +198,13 @@ export function LeadFormSection() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Submitting...
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+                <span>Submitting...</span>
               </>
             ) : (
               <>
-                <Send className="mr-2 h-5 w-5" />
-                Submit Inquiry
+                <Send className="mr-2 h-5 w-5" aria-hidden="true" />
+                <span>Submit Inquiry</span>
               </>
             )}
           </Button>

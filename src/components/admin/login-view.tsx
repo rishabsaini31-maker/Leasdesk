@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
@@ -13,10 +13,20 @@ import { loginSchema } from '@/lib/validation';
 import { useAuthStore } from '@/stores/auth-store';
 import type { LoginInput } from '@/lib/validation';
 
+const emailId = 'login-email';
+const passwordId = 'login-password';
+const emailErrId = 'login-email-err';
+const passwordErrId = 'login-password-err';
+
 export function LoginView() {
   const [isLoading, setIsLoading] = useState(false);
   const setAuth = useAuthStore((s) => s.setAuth);
   const setView = useAuthStore((s) => s.setView);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   const {
     register,
@@ -64,51 +74,59 @@ export function LoginView() {
           onClick={() => setView('landing')}
           className="mb-8 text-slate-600 hover:text-slate-900"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
           Back to Home
         </Button>
 
         <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm">
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center mx-auto mb-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center mx-auto mb-4" aria-hidden="true">
               <Lock className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">Admin Login</h1>
+            <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-bold text-slate-900 outline-none">
+              Admin Login
+            </h1>
             <p className="text-slate-500 mt-1">Sign in to access the dashboard</p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
             <div className="space-y-2">
-              <Label htmlFor="login-email" className="text-sm font-medium text-slate-700">
-                <Mail className="w-4 h-4 inline mr-1.5" />
+              <Label htmlFor={emailId} className="text-sm font-medium text-slate-700">
+                <Mail className="w-4 h-4 inline mr-1.5" aria-hidden="true" />
                 Email
               </Label>
               <Input
-                id="login-email"
+                id={emailId}
                 type="email"
                 placeholder="admin@leaddesk.com"
+                autoComplete="email"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? emailErrId : undefined}
                 {...register('email')}
                 className="bg-slate-50 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500/20"
               />
               {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
+                <p id={emailErrId} className="text-sm text-red-500" role="alert">{errors.email.message}</p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="login-password" className="text-sm font-medium text-slate-700">
-                <Lock className="w-4 h-4 inline mr-1.5" />
+              <Label htmlFor={passwordId} className="text-sm font-medium text-slate-700">
+                <Lock className="w-4 h-4 inline mr-1.5" aria-hidden="true" />
                 Password
               </Label>
               <Input
-                id="login-password"
+                id={passwordId}
                 type="password"
-                placeholder="••••••••"
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                aria-invalid={!!errors.password}
+                aria-describedby={errors.password ? passwordErrId : undefined}
                 {...register('password')}
                 className="bg-slate-50 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500/20"
               />
               {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
+                <p id={passwordErrId} className="text-sm text-red-500" role="alert">{errors.password.message}</p>
               )}
             </div>
 
@@ -119,11 +137,11 @@ export function LoginView() {
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                  <span>Signing in...</span>
                 </>
               ) : (
-                'Sign In'
+                <span>Sign In</span>
               )}
             </Button>
           </form>

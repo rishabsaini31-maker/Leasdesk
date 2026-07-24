@@ -1,13 +1,9 @@
 import { NextResponse } from 'next/server';
-import { COOKIE_OPTIONS } from '@/lib/auth';
 
 export async function POST() {
   try {
     const response = NextResponse.json({ message: 'Logged out successfully' });
-    response.cookies.set('auth_token', '', {
-      ...COOKIE_OPTIONS,
-      maxAge: 0,
-    });
+    response.cookies.delete('auth_token', { path: '/' });
     return response;
   } catch (error) {
     console.error('Logout error:', error);

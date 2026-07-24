@@ -1,5 +1,3 @@
-'use client';
-
 import { Heart } from 'lucide-react';
 
 export function Footer() {
@@ -8,7 +6,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-white font-semibold text-lg">
-            <span className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white text-sm font-bold">
+            <span className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white text-sm font-bold" aria-hidden="true">
               LD
             </span>
             LeadDesk Mini
@@ -25,7 +23,7 @@ export function Footer() {
             </a>
           </p>
           <p className="text-sm flex items-center gap-1">
-            Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> by Digital Heroes
+            Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" aria-hidden="true" /> by Digital Heroes
           </p>
         </div>
         <div className="mt-8 pt-8 border-t border-slate-800 text-center text-xs">

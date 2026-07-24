@@ -51,7 +51,7 @@ const itemVariants = {
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+    <section id="features" aria-labelledby="features-heading" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -60,7 +60,7 @@ export function FeaturesSection() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 id="features-heading" className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
             Everything You Need
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -81,7 +81,7 @@ export function FeaturesSection() {
               variants={itemVariants}
               className="group relative p-6 rounded-2xl border border-slate-200 bg-white hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-50 transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-4 group-hover:bg-emerald-100 transition-colors duration-300">
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-4 group-hover:bg-emerald-100 transition-colors duration-300" aria-hidden="true">
                 <feature.icon className="w-6 h-6 text-emerald-600" />
               </div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">{feature.title}</h3>
