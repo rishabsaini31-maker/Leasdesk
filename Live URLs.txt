@@ -1,0 +1,13 @@
+LeadDesk Mini - Live URLs
+
+Frontend (Landing Page)
+https://leaddesk-frontend.vercel.app
+
+Admin Login
+https://leasdesk-admin1.vercel.app/login
+
+Admin Dashboard
+https://leasdesk-admin1.vercel.app
+
+GitHub Repository
+https://github.com/rishabsaini31-maker/Leasdesk
