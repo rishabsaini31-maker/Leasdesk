@@ -49,7 +49,7 @@ export default function LoginPage() {
 
       setAuth({ id: result.admin.id, email: result.admin.email });
       toast.success('Welcome back, Admin!');
-      router.push('/admin');
+      router.push('/');
     } catch {
       toast.error('Network error. Please try again.');
     } finally {

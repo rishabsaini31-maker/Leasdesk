@@ -35,7 +35,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/admin/login');
+      router.push('/login');
     }
   }, [isAuthenticated, router]);
 
@@ -53,7 +53,7 @@ export default function DashboardPage() {
 
       if (res.status === 401) {
         toast.error('Session expired. Please login again.');
-        window.location.href = '/admin/login';
+        window.location.href = '/login';
         return;
       }
 
