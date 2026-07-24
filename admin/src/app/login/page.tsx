@@ -48,7 +48,7 @@ export default function LoginPage() {
         return;
       }
 
-      setAuth({ id: result.admin.id, email: result.admin.email });
+      setAuth({ id: result.admin.id, email: result.admin.email }, result.token);
       toast.success('Welcome back, Admin!');
       router.push('/');
     } catch {

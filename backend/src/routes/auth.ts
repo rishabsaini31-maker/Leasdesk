@@ -31,6 +31,7 @@ router.post('/login', async (req: AuthRequest, res: Response) => {
     res.cookie('auth_token', token, COOKIE_OPTIONS)
     return res.status(200).json({
       message: 'Login successful',
+      token,
       admin: { id: admin.id, email: admin.email },
     })
   } catch (error) {

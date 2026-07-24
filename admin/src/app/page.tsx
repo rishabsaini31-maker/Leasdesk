@@ -16,7 +16,7 @@ import { ViewLeadModal } from '@/components/ViewLeadModal';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { Lead, LeadStatus } from '@/types/lead';
-import { useAuthStore, validateSession } from '@/stores/auth-store';
+import { useAuthStore, validateSession, getAuthHeaders } from '@/stores/auth-store';
 
 const ITEMS_PER_PAGE = 10;
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -65,6 +65,7 @@ export default function DashboardPage() {
       if (debouncedSearch) params.set('search', debouncedSearch);
       
       const res = await fetch(`${API_URL}/api/leads?${params.toString()}`, {
+        headers: getAuthHeaders(),
         credentials: 'include',
       });
 
@@ -118,7 +119,7 @@ export default function DashboardPage() {
     try {
       const res = await fetch(`${API_URL}/api/leads/${leadId}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify({ status }),
         credentials: 'include',
       });

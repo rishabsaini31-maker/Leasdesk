@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
-import { useAuthStore } from '@/stores/auth-store';
+import { useAuthStore, getAuthHeaders } from '@/stores/auth-store';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,7 +25,7 @@ export function TopNavbar() {
     try {
       await fetch(`${API_URL}/api/auth/logout`, {
         method: 'POST',
-        credentials: 'include',
+        headers: getAuthHeaders(),
       });
     } catch {
       // Continue with client-side logout
