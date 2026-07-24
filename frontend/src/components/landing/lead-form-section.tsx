@@ -61,12 +61,9 @@ export function LeadFormSection() {
       const result = await res.json();
 
       if (!res.ok) {
-        if (result.details) {
-          const firstError = Object.values(result.details)[0]?.[0];
-          toast.error(firstError || 'Validation failed');
-        } else {
-          toast.error(result.error || 'Something went wrong');
-        }
+        const fieldErrors = result.details as Record<string, string[]>;
+        const firstError = Object.values(fieldErrors)[0]?.[0];
+        toast.error(firstError || result.error || 'Something went wrong');
         return;
       }
 
