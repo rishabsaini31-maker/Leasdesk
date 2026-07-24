@@ -15,14 +15,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
 export function TopNavbar() {
   const admin = useAuthStore((s) => s.admin);
   const logout = useAuthStore((s) => s.logout);
 
   const handleLogout = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      await fetch(`${apiUrl}/api/auth/logout`, {
+      await fetch(`${API_URL}/api/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });

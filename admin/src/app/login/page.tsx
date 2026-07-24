@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
@@ -13,7 +13,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { loginSchema } from '@/lib/validation';
 import type { LoginInput } from '@/lib/validation';
-import { useAuthStore } from '@/stores/auth-store';
+import { useAuthStore, validateSession } from '@/stores/auth-store';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,8 +34,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginInput) => {
     setIsLoading(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const res = await fetch(`${apiUrl}/api/auth/login`, {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -56,6 +57,24 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const checkSession = async () => {
+      const valid = await validateSession();
+      if (cancelled) return;
+      if (valid) {
+        router.push('/');
+      }
+    };
+
+    checkSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">

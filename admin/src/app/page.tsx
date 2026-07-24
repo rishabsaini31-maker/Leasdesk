@@ -16,13 +16,15 @@ import { ViewLeadModal } from '@/components/ViewLeadModal';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { Lead, LeadStatus } from '@/types/lead';
-import { useAuthStore } from '@/stores/auth-store';
+import { useAuthStore, validateSession } from '@/stores/auth-store';
 
 const ITEMS_PER_PAGE = 10;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export default function DashboardPage() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const logout = useAuthStore((s) => s.logout);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -34,26 +36,42 @@ export default function DashboardPage() {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, router]);
+    let cancelled = false;
+
+    const ensureAuth = async () => {
+      if (isAuthenticated) return;
+
+      const valid = await validateSession();
+      if (cancelled) return;
+
+      if (!valid) {
+        logout();
+        router.push('/login');
+      }
+    };
+
+    ensureAuth();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated, router, logout]);
 
   const fetchLeads = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
       const params = new URLSearchParams();
       if (debouncedSearch) params.set('search', debouncedSearch);
       
-      const res = await fetch(`${apiUrl}/api/leads?${params.toString()}`, {
+      const res = await fetch(`${API_URL}/api/leads?${params.toString()}`, {
         credentials: 'include',
       });
 
       if (res.status === 401) {
         toast.error('Session expired. Please login again.');
-        window.location.href = '/login';
+        logout();
+        router.push('/login');
         return;
       }
 
@@ -75,7 +93,7 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, statusFilter]);
+  }, [debouncedSearch, statusFilter, logout, router]);
 
   useEffect(() => {
     fetchLeads();
@@ -98,8 +116,7 @@ export default function DashboardPage() {
 
   const handleStatusChange = async (leadId: string, status: LeadStatus) => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const res = await fetch(`${apiUrl}/api/leads/${leadId}/status`, {
+      const res = await fetch(`${API_URL}/api/leads/${leadId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),

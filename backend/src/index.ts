@@ -53,7 +53,7 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok', service: 'leaddesk-backend' })
 })
 
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+if (!process.env.VERCEL) {
   const server = app.listen(PORT, () => {
     console.log(`Backend server running on http://localhost:${PORT}`)
   })

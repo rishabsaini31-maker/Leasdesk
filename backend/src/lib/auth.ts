@@ -5,10 +5,13 @@ export const JWT_SECRET = process.env.JWT_SECRET!
 export const JWT_EXPIRES_IN = '7d'
 const isProd = process.env.NODE_ENV === 'production' || !!process.env.VERCEL
 
+const cookieSecure = process.env.COOKIE_SECURE === 'true' ? true : (process.env.COOKIE_SECURE === 'false' ? false : isProd)
+const cookieSameSite = (process.env.COOKIE_SAMESITE as 'lax' | 'none' | 'strict') || (isProd ? 'none' : 'lax')
+
 export const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: isProd,
-  sameSite: isProd ? ('none' as const) : ('lax' as const),
+  secure: cookieSecure,
+  sameSite: cookieSameSite,
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: '/',
 }
