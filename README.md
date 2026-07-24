@@ -112,5 +112,5 @@ Updated reverse proxy routes:
 
 ## Admin Credentials
 
-- Email: `admin@leaddesk.com`
-- Password: `Admin@123`
+- Email: `rishabsainiupw3112@gmail.com`
+- Password: `RSS@3112`
