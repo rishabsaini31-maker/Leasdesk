@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { LeadStatus, STATUS_OPTIONS } from '@/types/lead';
+import { StatusBadge } from '@/components/StatusBadge';
 import { toast } from 'sonner';
 
 interface StatusDropdownProps {

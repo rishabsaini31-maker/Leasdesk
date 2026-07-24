@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, IndianRupee, Calendar, User } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { LeadStatus, STATUS_OPTIONS } from '@/types/lead';
 import { StatusBadge } from '@/components/StatusBadge';

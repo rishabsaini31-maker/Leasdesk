@@ -70,7 +70,7 @@ export function LeadFormSection() {
 
       toast.success('Your request has been submitted successfully.');
       reset();
-      setValue('budget', undefined);
+      setValue('budget', undefined as unknown as LeadCreateInput['budget']);
     } catch {
       toast.error('Something went wrong. Please try again.');
     } finally {
