@@ -44,7 +44,7 @@ export function LeadFormSection() {
     defaultValues: {
       name: '',
       email: '',
-      budget: '',
+      budget: undefined,
       message: '',
     },
   });
@@ -72,7 +72,7 @@ export function LeadFormSection() {
 
       toast.success('Lead submitted successfully! We\'ll be in touch soon.');
       reset();
-      setValue('budget', '');
+      setValue('budget', undefined);
     } catch {
       toast.error('Network error. Please check your connection and try again.');
     } finally {
